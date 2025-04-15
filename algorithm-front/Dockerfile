@@ -5,7 +5,7 @@ FROM node:22.14.0
 WORKDIR /app
 
 # 종속성 파일 복사
-COPY package.json package-lock.json ./
+COPY package.json ./
 
 # 종속성 설치
 RUN npm install --legacy-peer-deps
