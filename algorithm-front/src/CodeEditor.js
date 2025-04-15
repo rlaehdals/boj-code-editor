@@ -73,7 +73,7 @@ const CodeEditor = () => {
 
   const runCode = async () => {
     if (!validateTestCases()) {
-      alert("모든 테스트 케이스에 입력값과 출력값을 입력해주세요.");
+      alert("Please enter both input and output for all test cases.");
       return;
     }
 
@@ -84,7 +84,7 @@ const CodeEditor = () => {
     const results = await Promise.all(
       updated.map(async (tc) => {
         try {
-          const res = await fetch('https://dkim-boj-code-edit.p-e.kr/api/codes', {
+          const res = await fetch(process.env.REACT_APP_API_URL || 'http://localhost:8080/api/codes', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -113,7 +113,7 @@ const CodeEditor = () => {
               input: tc.input,
               expected: tc.output,
               actual: null,
-              errorMessage: '네트워크 오류',
+              errorMessage: 'Network error',
             },
           };
         }
@@ -131,14 +131,14 @@ const CodeEditor = () => {
 
   const copyCode = () => {
     navigator.clipboard.writeText(code)
-      .then(() => alert('코드가 복사되었습니다!'))
-      .catch(() => alert('복사에 실패했습니다.'));
+      .then(() => alert('Code copied successfully!'))
+      .catch(() => alert('Failed to copy the code.'));
   };
 
   return (
     <div className="code-editor-container">
       <div className="code-section">
-        <h2>코드 입력</h2>
+        <h2>Code Input</h2>
         <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', alignItems: 'center' }}>
           <button
             onClick={copyCode}
@@ -153,7 +153,7 @@ const CodeEditor = () => {
               height: '32px',
             }}
           >
-            📋 코드 복사
+            📋 Copy Code
           </button>
           <button
             onClick={() => setAutocomplete((prev) => !prev)}
@@ -168,7 +168,7 @@ const CodeEditor = () => {
               height: '32px',
             }}
           >
-            ⚙️ 자동완성 {autocomplete ? '끄기' : '켜기'}
+            ⚙️ Autocomplete {autocomplete ? 'Off' : 'On'}
           </button>
           <select
             value={language}
@@ -181,14 +181,14 @@ const CodeEditor = () => {
               padding: '6px 12px',
               fontSize: '14px',
               cursor: 'pointer',
-              height: '32px', // 버튼 높이에 맞춤
+              height: '32px', // Match the button height
               display: 'flex',
               alignItems: 'center',
             }}
           >
             <option value="java">Java</option>
             <option value="python">Python</option>
-            <option value="javascript">JavaScript</option> {/* JavaScript 추가 */}
+            <option value="javascript">JavaScript</option> {/* Added JavaScript */}
           </select>
         </div>
         <AceEditor
@@ -219,13 +219,13 @@ const CodeEditor = () => {
       </div>
 
       <div className="action-section">
-        <button className="modal-btn" onClick={() => setShowModal(true)}>테스트 케이스 설정</button>
-        <button className="run-btn" onClick={runCode} disabled={testCases.length === 0}>코드 실행</button>
+        <button className="modal-btn" onClick={() => setShowModal(true)}>Test Case Settings</button>
+        <button className="run-btn" onClick={runCode} disabled={testCases.length === 0}>Run Code</button>
       </div>
 
       {resultsVisible && testCases.some(tc => tc.result || tc.loading) && (
         <div className="results-section">
-          <h2>결과</h2>
+          <h2>Results</h2>
           {testCases.map((tc, i) => {
             const r = tc.result;
             const status = getResultStatus(r);
@@ -233,14 +233,14 @@ const CodeEditor = () => {
             return (
               <div key={i} className={`result-card ${status}`}>
                 {tc.loading ? (
-                  <div className="loading">⏳ 실행 중...</div>
+                  <div className="loading">⏳ Running...</div>
                 ) : (
                   <>
-                    <ResultBlock label="입력값" value={r.input} />
-                    <ResultBlock label="기대한 출력" value={r.expected} />
-                    {r.actual !== null && <ResultBlock label="실제 출력" value={r.actual} />}
+                    <ResultBlock label="Input" value={r.input} />
+                    <ResultBlock label="Expected Output" value={r.expected} />
+                    {r.actual !== null && <ResultBlock label="Actual Output" value={r.actual} />}
                     {status === 'error' && (
-                      <ResultBlock label="에러 메시지" value={r.errorMessage} isError />
+                      <ResultBlock label="Error Message" value={r.errorMessage} isError />
                     )}
                   </>
                 )}
@@ -258,7 +258,7 @@ const CodeEditor = () => {
           onRemove={removeTestCase}
           onClose={() => {
             if (!validateTestCases()) {
-              alert("모든 테스트 케이스에 입력값과 출력값을 입력해주세요.");
+              alert("Please enter both input and output for all test cases.");
               return;
             }
             setShowModal(false);
@@ -279,18 +279,18 @@ const ResultBlock = ({ label, value, isError }) => (
 const TestCaseModal = ({ testCases, onChange, onAdd, onRemove, onClose }) => (
   <div className="modal-overlay">
     <div className="modal-content">
-      <h3>테스트 케이스 설정</h3>
+      <h3>Test Case Settings</h3>
       {testCases.map((tc, i) => (
         <div key={i} className="modal-testcase-row">
           <textarea
-            placeholder="입력값"
+            placeholder="Input"
             value={tc.input}
             onChange={(e) => onChange(i, 'input', e.target.value)}
             className={tc.input === '' ? 'input-error' : ''}
             rows={3}
           />
           <textarea
-            placeholder="출력값"
+            placeholder="Output"
             value={tc.output}
             onChange={(e) => onChange(i, 'output', e.target.value)}
             className={tc.output === '' ? 'input-error' : ''}
@@ -299,9 +299,9 @@ const TestCaseModal = ({ testCases, onChange, onAdd, onRemove, onClose }) => (
           <button className="delete-btn" onClick={() => onRemove(i)}>❌</button>
         </div>
       ))}
-      <button className="add-btn" onClick={onAdd}>+ 테스트 케이스 추가</button>
+      <button className="add-btn" onClick={onAdd}>+ Add Test Case</button>
       <div className="modal-actions">
-        <button onClick={onClose}>닫기</button>
+        <button onClick={onClose}>Close</button>
       </div>
     </div>
   </div>
