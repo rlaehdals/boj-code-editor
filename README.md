@@ -4,6 +4,8 @@
 
 While solving Baekjoon algorithms, I thought it would be helpful to have a web-based code editor. So, I created a code editor optimized for Baekjoon. This web-based editor supports Java, Python, and JavaScript.
 
+<img width="991" alt="Image" src="https://github.com/user-attachments/assets/47291ddb-01ec-466d-ac15-1615fc689546" />
+
 ## Prerequisites
 
 - Docker Compose must be installed to run the project.
@@ -13,6 +15,7 @@ While solving Baekjoon algorithms, I thought it would be helpful to have a web-b
 1. Clone the repository and navigate to the project root directory.
 2. You can deploy the application by running the `deploy.sh` script located at the root of the project.
 3. On the first launch, select option 1 and follow the prompts for further configuration.
+4. Once the application is running, access it by navigating to `http://localhost:3000` in your web browser.
 
 ## Customization
 
