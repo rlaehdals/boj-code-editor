@@ -1,0 +1,89 @@
+version: '3.8'
+
+services:
+  server:
+    build:
+      context: ./algorithm
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1024M
+
+  front:
+    build:
+      context: ./algorithm-front
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+
+  java-executor:
+    build:
+      context: ./java-executor
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1024M
+
+  python-executor:
+    build:
+      context: ./python-executor
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1024M
+
+  javascript-executor:
+    build:
+      context: ./javascript-executor
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    env_file:
+      - ./javascript-executor/.env
+    environment:
+      - ALLOWED_ORIGIN=${ALLOWED_ORIGIN}
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1024M

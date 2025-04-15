@@ -1,0 +1,101 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Japanese Learning</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <link href="https://ai-public.creatie.ai/gen_page/tailwind-custom-v2.css" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com/3.4.5?plugins=forms@0.5.7,typography@0.5.13,aspect-ratio@0.4.2,container-queries@0.1.1"></script>
+    <script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#000000" data-border-radius="small"></script>
+    <style>@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); }}</style></head>
+<body class="bg-gray-50">
+<div class="max-w-[375px] mx-auto min-h-screen pb-16"><div id="login" class="px-4 py-12 flex flex-col items-center justify-center h-screen"><div class="text-center mb-8"><h1 class="text-3xl font-bold mb-2">Japanese Learning</h1><p class="text-gray-600">Sign in to access your learning progress</p></div><button class="w-full flex items-center justify-center gap-3 bg-white border rounded-lg px-6 py-3 text-gray-700 hover:shadow-md transition-shadow"><img src="https://www.google.com/favicon.ico" alt="Google" class="w-5 h-5"/><span>Continue with Google</span></button></div>
+    <div id="words" class="px-4 hidden">
+        <div class="sticky top-0 bg-white z-10 py-4">
+            <button class="w-full bg-custom text-white py-3 !rounded-button mb-4">Take Test</button>
+            <div class="flex gap-4 mb-4">
+                <select class="flex-1 border rounded-lg px-4 py-2 bg-white">
+                    <option>Level 1</option>
+                    <option>Level 2</option>
+                    <option>Level 3</option>
+                </select>
+                <select class="flex-1 border rounded-lg px-4 py-2 bg-white">
+                    <option>Day 1</option>
+                    <option>Day 2</option>
+                    <option>Day 3</option>
+                </select>
+            </div>
+        </div>
+        <div class="space-y-4">
+            <div class="bg-white p-4 rounded-lg shadow-sm">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="text-xl font-medium">食べる</h3>
+                        <p class="text-gray-500">たべる</p>
+                        <p class="text-gray-700">to eat</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <button class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
+                            <i class="fas fa-volume-up text-gray-600"></i>
+                        </button>
+                        <button class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
+                            <i class="far fa-star text-gray-600"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-sm">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="text-xl font-medium">飲む</h3>
+                        <p class="text-gray-500">のむ</p>
+                        <p class="text-gray-700">to drink</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <button class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
+                            <i class="fas fa-volume-up text-gray-600"></i>
+                        </button>
+                        <button class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
+                            <i class="fas fa-star text-custom"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="tests" class="px-4 hidden">
+        <div class="space-y-4 mt-4"><div class="bg-white p-6 rounded-lg shadow-sm"><div class="flex justify-between items-center mb-6"><h2 class="text-xl font-medium">Writing Practice</h2><span class="text-sm text-gray-500">Level 1 - Day 1</span></div><div class="space-y-6"><div class="border-b pb-4"><div class="flex justify-between items-center mb-2"><span class="text-lg">Question 1</span><span class="text-green-500"><i class="fas fa-check"></i> Correct</span></div><p class="text-gray-600 mb-2">Write the correct hiragana for 食べる:</p><div class="space-y-3"><input type="text" class="w-full border rounded-lg p-3" placeholder="Type your answer here..."/><div class="text-green-500"><i class="fas fa-check mr-2"></i>Correct answer: たべる</div></div></div><div class="border-b pb-4"><div class="flex justify-between items-center mb-2"><span class="text-lg">Question 2</span><span class="text-red-500"><i class="fas fa-times"></i> Incorrect</span></div><p class="text-gray-600 mb-2">Write the correct hiragana for 飲む:</p><div class="space-y-3"><input type="text" class="w-full border rounded-lg p-3 border-red-500" placeholder="Type your answer here..."/><div class="text-red-500"><i class="fas fa-times mr-2"></i>Your answer: たべる</div><div class="text-green-500"><i class="fas fa-check mr-2"></i>Correct answer: のむ</div></div></div></div><div class="mt-6"><div class="flex justify-between text-sm text-gray-600"><span>Final Score: 9/10</span><span>90%</span></div><div class="w-full bg-gray-200 rounded-full h-3 mt-2"><div class="bg-custom h-3 rounded-full" style="width: 90%"></div></div></div></div></div>
+    </div>
+    <div id="favorites" class="px-4 hidden">
+        <div class="sticky top-0 bg-white z-10 py-4"><div class="flex gap-4 mb-4"><select class="flex-1 border rounded-lg px-4 py-2 bg-gray-100 text-gray-400" disabled=""><option>All Levels</option></select><select class="flex-1 border rounded-lg px-4 py-2 bg-gray-100 text-gray-400" disabled=""><option>All Days</option></select></div><button class="w-full bg-custom text-white py-3 !rounded-button mb-4">Take Test</button></div>
+        <div class="space-y-4"><div class="flex items-center justify-between mb-4 text-sm"><span class="text-gray-500">Showing all favorited words</span><span class="text-gray-500">Total: 2 words</span></div><div class="bg-white p-4 rounded-lg shadow-sm"><div class="flex justify-between items-center"><div><h3 class="text-xl font-medium">飲む</h3><p class="text-gray-500">のむ</p><p class="text-gray-700">to drink</p></div><div class="flex gap-3"><button class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center"><i class="fas fa-volume-up text-gray-600"></i></button><button class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center"><i class="fas fa-star text-custom"></i></button></div></div></div><div class="bg-white p-4 rounded-lg shadow-sm"><div class="flex justify-between items-center"><div><h3 class="text-xl font-medium">食べる</h3><p class="text-gray-500">たべる</p><p class="text-gray-700">to eat</p></div><div class="flex gap-3"><button class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center"><i class="fas fa-volume-up text-gray-600"></i></button><button class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center"><i class="fas fa-star text-custom"></i></button></div></div></div></div>
+    </div>
+    <nav class="fixed bottom-0 w-full bg-white border-t hidden">
+        <div class="max-w-[375px] mx-auto grid grid-cols-3 h-16">
+            <button class="flex flex-col items-center justify-center gap-1 text-gray-400" onclick="switchTab(&#39;words&#39;)">
+                <i class="fas fa-book"></i>
+                <span class="text-xs">Words</span>
+            </button>
+            <button class="flex flex-col items-center justify-center gap-1 text-gray-400" onclick="switchTab(&#39;tests&#39;)" style="">
+                <i class="fas fa-tasks"></i>
+                <span class="text-xs">Tests</span>
+            </button>
+            <button class="flex flex-col items-center justify-center gap-1 text-custom" onclick="switchTab(&#39;favorites&#39;)">
+                <i class="fas fa-star"></i>
+                <span class="text-xs">Favorites</span>
+            </button>
+        </div>
+    </nav>
+</div>
+<script>
+    function switchTab(tabId) {
+        document.getElementById('words').classList.add('hidden');
+        document.getElementById('tests').classList.add('hidden');
+        document.getElementById('favorites').classList.add('hidden');
+        document.getElementById(tabId).classList.remove('hidden');
+        const buttons = document.querySelectorAll('nav button');
+        buttons.forEach(button => button.classList.remove('text-custom'));
+        buttons.forEach(button => button.classList.add('text-gray-400'));
+        event.currentTarget.classList.remove('text-gray-400');
+        event.currentTarget.classList.add('text-custom');
+    }
+</script>

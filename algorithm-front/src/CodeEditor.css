@@ -1,0 +1,221 @@
+body {
+  background-color: #121212;
+  color: #e0e0e0;
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.code-editor-container {
+  padding: 2rem;
+  max-width: 1000px;
+  margin: auto;
+  background: #1e1e1e;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+  box-sizing: border-box;
+}
+
+.code-section h2,
+.results-section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.code-input {
+  width: 100%;
+  min-height: 300px;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  color: #f1f1f1;
+  font-family: monospace;
+  padding: 1rem;
+  border-radius: 8px;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.copy-btn,
+.modal-btn,
+.run-btn,
+.add-btn,
+.modal-actions button,
+.delete-btn {
+  margin-top: 1rem;
+  background: #272727;
+  color: #ffffff;
+  border: 1px solid #444;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.copy-btn:hover,
+.modal-btn:hover,
+.run-btn:hover,
+.add-btn:hover,
+.modal-actions button:hover,
+.delete-btn:hover {
+  background: #3a3a3a;
+  transform: scale(1.05);
+}
+
+.run-btn:disabled {
+  background: #555;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.action-section {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.results-section {
+  margin-top: 2rem;
+}
+
+.result-card {
+  background: #1b1b1b;
+  border: 1px solid #333;
+  border-left: 5px solid #555;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.result-card.success {
+  border-left-color: #4caf50;
+}
+
+.result-card.fail {
+  border-left-color: #f44336;
+}
+
+.result-card.error {
+  border-left-color: #ff9800;
+}
+
+.result-card .loading {
+  color: #2196f3;
+  font-style: italic;
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+}
+
+.error-message {
+  color: #ff9800;
+  margin-top: 0.5rem;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(10, 10, 10, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #222;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 600px;
+  max-width: 95%;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.9);
+}
+
+.modal-content h3 {
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+
+.modal-testcase-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.modal-testcase-row input {
+  flex: 1;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background: #1a1a1a;
+  color: #f0f0f0;
+}
+
+.modal-testcase-row textarea {
+  width: 100%;
+  padding: 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background: #1a1a1a;
+  color: #f0f0f0;
+  resize: vertical;
+  box-sizing: border-box;
+  white-space: pre-wrap; /* 줄 바꿈을 그대로 표시 */
+}
+
+.input-error {
+  border: 1px solid red;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.input-error {
+  border: 1px solid red; /* 입력값이 없을 때 빨간 테두리 */
+}
+
+.error-message {
+  color: red;
+  margin-top: 1rem;
+}
+
+.modal-actions button:disabled {
+  background: #555;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.result-card {
+  white-space: pre-wrap; /* 줄 바꿈을 그대로 표시 */
+}
+
+.result-block {
+  margin-bottom: 0.75rem;
+}
+
+.result-label {
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+  color: #9acdff;
+}
+
+.result-content {
+  background: #101010;
+  padding: 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #333;
+  white-space: pre-wrap;
+}
+
+.error-text {
+  color: #ff9800;
+}
+
+.ace_editor, .ace_content {
+  font-family: 'Fira Code', monospace !important;
+}
