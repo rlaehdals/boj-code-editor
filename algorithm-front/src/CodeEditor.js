@@ -84,7 +84,7 @@ const CodeEditor = () => {
     const results = await Promise.all(
       updated.map(async (tc) => {
         try {
-          const res = await fetch(process.env.REACT_APP_API_URL || 'http://localhost:8080/api/codes', {
+          const res = await fetch(process.env.REACT_APP_API_URL || 'http://localhost:8080/codes', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
