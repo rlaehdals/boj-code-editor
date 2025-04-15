@@ -4,6 +4,8 @@
 
 While solving Baekjoon algorithms, I thought it would be helpful to have a web-based code editor. So, I created a code editor optimized for Baekjoon. This web-based editor supports Java, Python, and JavaScript.
 
+<img width="991" alt="Image" src="https://github.com/user-attachments/assets/47291ddb-01ec-466d-ac15-1615fc689546" />
+
 ## Prerequisites
 
 - Docker Compose must be installed to run the project.
