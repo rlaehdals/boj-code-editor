@@ -3,15 +3,15 @@ import subprocess
 import tempfile
 import os
 import shutil
-import threading
 
 app = Flask(__name__)
 
 TIMEOUT_SECONDS = 10
 
 FORBIDDEN_APIS = [
-    "import os", "import sys", "subprocess", "eval", "exec", "open",
-    "__import__", "compile", "globals", "locals", "input", "from os", "from sys"
+    "import os", "subprocess", "eval", "exec", "open",
+    "__import__", "compile", "globals", "locals",
+    "from os", "requests", "socket", "urllib"
 ]
 
 STATUS = {
@@ -44,32 +44,38 @@ def execute_code(code: str, input_data: str):
         with open(script_path, "w") as f:
             f.write(code)
 
-        proc = subprocess.Popen(
-            ['python3', script_path],
-            stdin=subprocess.PIPE,
+        exec_cmd = f"ulimit -v 262144; python3 script.py"
+        result = subprocess.run(
+            ["bash", "-c", exec_cmd],
+            input=input_data,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
+            text=True,
             cwd=temp_dir,
-            text=True
+            timeout=TIMEOUT_SECONDS
         )
 
-        timer = threading.Timer(TIMEOUT_SECONDS, proc.kill)
-        try:
-            timer.start()
-            stdout, stderr = proc.communicate(input=input_data)
-            exit_code = proc.returncode
-        finally:
-            timer.cancel()
+        stderr = result.stderr.strip()
+        stdout = result.stdout
 
-        if exit_code is None:
+        # 메모리 초과 메시지 치환
+        if "MemoryError" in stderr or "Killed" in stderr or "cannot allocate memory" in stderr:
             return build_response(
-                stderr="Execution timed out.",
-                exit_code=-1,
-                status=STATUS["TIMEOUT"]
+                stdout=stdout,
+                stderr="Memory limit might have been exceeded.",
+                exit_code=result.returncode,
+                status=STATUS["RUNTIME_ERROR"]
             )
 
-        status = STATUS["SUCCESS"] if exit_code == 0 else STATUS["RUNTIME_ERROR"]
-        return build_response(stdout, stderr, exit_code, status)
+        status = STATUS["SUCCESS"] if result.returncode == 0 else STATUS["RUNTIME_ERROR"]
+        return build_response(stdout, stderr, result.returncode, status)
+
+    except subprocess.TimeoutExpired:
+        return build_response(
+            stderr="Execution timed out.",
+            exit_code=-1,
+            status=STATUS["TIMEOUT"]
+        )
 
     except Exception as e:
         return build_response(
@@ -79,7 +85,6 @@ def execute_code(code: str, input_data: str):
 
     finally:
         shutil.rmtree(temp_dir, ignore_errors=True)
-
 
 @app.route("/execute", methods=["POST"])
 def execute():
@@ -105,4 +110,3 @@ def execute():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8082)
-

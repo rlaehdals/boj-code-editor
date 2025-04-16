@@ -83,12 +83,27 @@ public class ExecutorServer {
                 return buildErrorResponse("Execution timed out.", -1, "TIME_OUT");
             }
 
-            return buildJsonResponse(
-                    new String(runProcess.getInputStream().readAllBytes()),
-                    new String(runProcess.getErrorStream().readAllBytes()),
-                    runProcess.exitValue(),
-                    "SUCCESS"
-            );
+            int exitCode = runProcess.exitValue();
+            byte[] stdoutBytes = runProcess.getInputStream().readAllBytes();
+            byte[] stderrBytes = runProcess.getErrorStream().readAllBytes();
+
+            String stdout = new String(stdoutBytes);
+            String stderr = new String(stderrBytes);
+
+            if (stderr.contains("OutOfMemoryError")) {
+                return buildErrorResponse("Memory limit might have been exceeded.", exitCode, "MEMORY_ERROR");
+            }
+
+            if (stderr.toLowerCase().contains("killed")) {
+                return buildErrorResponse("Memory limit might have been exceeded.", exitCode, "MEMORY_ERROR");
+            }
+
+            if (exitCode != 0 && stderr.isBlank()) {
+                return buildErrorResponse("Memory limit might have been exceeded.", exitCode, "MEMORY_ERROR");
+            }
+
+            String status = exitCode == 0 ? "SUCCESS" : "RUNTIME_ERROR";
+            return buildJsonResponse(stdout, stderr, exitCode, status);
 
         } catch (Exception e) {
             return buildErrorResponse("Execution Error: " + e.getMessage(), -1, "error");
