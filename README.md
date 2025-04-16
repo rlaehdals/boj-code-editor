@@ -4,7 +4,7 @@
 
 While solving Baekjoon algorithms, I thought it would be helpful to have a web-based code editor. So, I created a code editor optimized for Baekjoon. This web-based editor supports Java, Python, and JavaScript.
 
-<img width="991" alt="Image" src="https://github.com/user-attachments/assets/47291ddb-01ec-466d-ac15-1615fc689546" />
+<img width="976" alt="Image" src="https://github.com/user-attachments/assets/b20f5023-3eb4-426a-91ef-c7ac8ba6c7c1" />
 
 ## Prerequisites
 
@@ -26,5 +26,5 @@ If you want to expose the editor externally, you can follow these steps:
    - The executors should be accessible via a subdomain, such as `code.example.com`.
 3. **Configuration:** 
    - In the server's `application.yaml`, set the `code.executor.url` value to point to your executor's URL (e.g., `https://code.example.com`).
-   - In the `javascript-executor`, create a `.env` file and set the `ALLOWED_ORIGIN` variable to the domain where the frontend is hosted (e.g., `https://example.com`).
+   - In the `algorithm-front`,`javascript-executor`, create a `.env` file and set the `REACT_APP_API_URL`, `ALLOWED_ORIGIN` variable to the domain where the frontend is hosted (e.g., `https://example.com`).
 
