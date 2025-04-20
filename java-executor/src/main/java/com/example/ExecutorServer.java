@@ -2,6 +2,7 @@ package com.example;
 
 import static spark.Spark.*;
 
+import com.google.googlejavaformat.java.Formatter;
 import com.google.gson.*;
 
 import java.io.*;
@@ -28,6 +29,22 @@ public class ExecutorServer {
 
     public static void main(String[] args) {
         port(PORT);
+
+        post("/format", (req, res) -> {
+            res.type("application/json");
+
+            JsonObject requestJson = JsonParser.parseString(req.body()).getAsJsonObject();
+            String code = requestJson.get("code").getAsString();
+
+            try {
+                String formattedCode = formatJavaCode(code);
+                JsonObject responseJson = new JsonObject();
+                responseJson.addProperty("formattedCode", formattedCode);
+                return responseJson.toString();
+            } catch (Exception e) {
+                return buildErrorResponse("Formatting Error: " + e.getMessage(), -1, "FORMATTING_ERROR");
+            }
+        });
 
         post("/execute", (req, res) -> {
             res.type("application/json");
@@ -153,4 +170,9 @@ public class ExecutorServer {
                 .map(Path::toFile)
                 .forEach(File::delete);
     }
+
+    private static String formatJavaCode(String inputCode) throws Exception {
+        return new Formatter().formatSource(inputCode);
+    }
+
 }

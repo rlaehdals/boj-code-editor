@@ -1,5 +1,6 @@
 package dkim.algorithm.service;
 
+import dkim.algorithm.controller.request.FormatCode;
 import dkim.algorithm.controller.request.Language;
 import dkim.algorithm.controller.request.SubmissionCodes;
 import dkim.algorithm.controller.response.CodeSubmissionResult;
@@ -32,8 +33,6 @@ public class CodeService {
         }
 
         String url = baseUrl + "/execute";
-
-        System.out.println(url);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -69,5 +68,25 @@ public class CodeService {
             case JAVASCRIPT -> "javascript";
             default -> null;
         };
+    }
+
+    public Object formatCode(final FormatCode formatCode) {
+        String languagePath = getLanguagePath(formatCode.getLanguage());
+        String baseUrl = getBaseUrl(languagePath);
+
+        String url = baseUrl + "/format";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<SubmissionCodes> requestEntity = new HttpEntity<>(submissionCodes, headers);
+
+        CodeSubmissionResult result = restTemplate.postForObject(url, requestEntity, CodeSubmissionResult.class);
+
+        if (result != null && (result.getStderr() == null || result.getStderr().isEmpty())) {
+            return new SubmissionCodesResponse(submissionCodes.getExpectedAnswer(), result.getStdout(), null);
+        } else {
+            return new SubmissionCodesResponse(null, null, result != null ? result.getStderr() : "Execution failed");
+        }
     }
 }

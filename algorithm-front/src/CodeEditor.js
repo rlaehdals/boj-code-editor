@@ -6,6 +6,9 @@ import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/mode-java';
 import 'ace-builds/src-noconflict/mode-python';
 import 'ace-builds/src-noconflict/mode-javascript';
+import prettier from "prettier/standalone";
+import * as parserBabel from "prettier/parser-babel";
+import estreePlugin from "prettier/plugins/estree";
 import './CodeEditor.css';
 
 const defaultCode = {
@@ -54,6 +57,43 @@ const CodeEditor = () => {
   useEffect(() => {
     setCode(defaultCode[language]);
   }, [language]);
+
+  const formatCode = async () => {
+    if (language === 'javascript') {
+      try {
+        const formatted = await prettier.format(code, {
+          parser: "babel",
+          plugins: [parserBabel, estreePlugin],
+        });
+
+        if (typeof formatted === 'string') {
+          setCode(formatted);
+        } else {
+          console.error('Invalid formatted code:', formatted);
+        }
+      } catch (error) {
+        console.error('JavaScript formatting error:', error);
+      }
+    } else {
+      try {
+        const res = await fetch(process.env.REACT_APP_API_URL || 'http://localhost:8080/code/format', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code, language }),
+        });
+
+        const data = await res.json();
+
+        if (typeof data.formattedCode === 'string') {
+          setCode(data.formattedCode);
+        } else {
+          console.error('Formatting failed:', data);
+        }
+      } catch (error) {
+        console.error('Error fetching formatted code:', error);
+      }
+    }
+  };
 
   const handleTestCaseChange = (index, field, value) => {
     const updated = [...testCases];
@@ -154,6 +194,21 @@ const CodeEditor = () => {
             }}
           >
             📋 Copy Code
+          </button>
+          <button
+            onClick={formatCode}
+            style={{
+              backgroundColor: '#2d2d2d',
+              color: '#fff',
+              border: '1px solid #444',
+              borderRadius: '6px',
+              padding: '6px 12px',
+              fontSize: '14px',
+              cursor: 'pointer',
+              height: '32px',
+            }}
+          >
+            🔧 Format Code
           </button>
           <button
             onClick={() => setAutocomplete((prev) => !prev)}
