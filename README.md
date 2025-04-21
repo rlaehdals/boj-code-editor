@@ -44,12 +44,15 @@ To expose the editor to the public, follow these steps:
 
 ### 1. 🛠 Domain & NGINX Setup
 - Point your domain to a server with NGINX and configure a reverse proxy.
+- If needed, just fill in the values for the 3 configuration files below.
 
 ### 2. 🏷 Recommended URL structure
 - Frontend: `https://example.com`
-- Executor server: `https://code.example.com`
+- Server: `https://api.example.com`
+- Executor: `https://code.example.com`
 
 ### 3. 🔧 Configuration
+
 - **Server (`application.yaml`)**
   ```yaml
   code:
@@ -58,7 +61,12 @@ To expose the editor to the public, follow these steps:
   ```
 - **Frontend (`.env`)**
   ```env
-  REACT_APP_API_URL=https://example.com
+  REACT_APP_API_URL=https://api.example.com
+  ```
+- **Executor (`docker-compose.yaml`)**
+  ```
+  environment:
+    - ALLOWED_ORIGIN="https://api.example.com"
   ```
 
 ---
