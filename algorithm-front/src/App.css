@@ -29,7 +29,7 @@
 }
 
 body {
-  overflow: hidden; /* 전체 페이지 스크롤 막기 */
+  overflow: hidden;
 }
 
 @keyframes App-logo-spin {

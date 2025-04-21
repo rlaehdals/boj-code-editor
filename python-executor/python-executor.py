@@ -3,6 +3,8 @@ import subprocess
 import tempfile
 import os
 import shutil
+import black
+import traceback
 
 app = Flask(__name__)
 
@@ -58,7 +60,6 @@ def execute_code(code: str, input_data: str):
         stderr = result.stderr.strip()
         stdout = result.stdout
 
-        # 메모리 초과 메시지 치환
         if "MemoryError" in stderr or "Killed" in stderr or "cannot allocate memory" in stderr:
             return build_response(
                 stdout=stdout,
@@ -86,6 +87,7 @@ def execute_code(code: str, input_data: str):
     finally:
         shutil.rmtree(temp_dir, ignore_errors=True)
 
+
 @app.route("/execute", methods=["POST"])
 def execute():
     try:
@@ -106,6 +108,52 @@ def execute():
         return jsonify(build_response(
             stderr=f"Server Error: {str(e)}"
         ))
+
+
+@app.route("/format", methods=["POST"])
+def format():
+    response = {
+        "code": "",
+        "stderr": "",
+        "exitCode": "0",
+        "status": "success"
+    }
+
+    try:
+        data = request.get_json()
+        input_code = data.get("code", "")
+        response["code"] = input_code
+
+        if not input_code.strip():
+            response["stderr"] = "Empty code provided"
+            response["exitCode"] = "1"
+            response["status"] = "error"
+            return jsonify(response)
+
+        try:
+            formatted_code = black.format_str(input_code, mode=black.FileMode())
+
+            if formatted_code is None or formatted_code == "":
+                response["stderr"] = "Formatting resulted in empty code"
+                response["exitCode"] = "1"
+                response["status"] = "error"
+            else:
+                response["code"] = formatted_code
+                response["status"] = "success"
+
+        except Exception as e:
+            error_trace = traceback.format_exc()
+            response["stderr"] = f"Formatting error: {str(e)}\n{error_trace}"
+            response["exitCode"] = "1"
+            response["status"] = "error"
+
+    except Exception as e:
+        error_trace = traceback.format_exc()
+        response["stderr"] = f"Server error: {str(e)}\n{error_trace}"
+        response["exitCode"] = "1"
+        response["status"] = "error"
+
+    return jsonify(response)
 
 
 if __name__ == "__main__":

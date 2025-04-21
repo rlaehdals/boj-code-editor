@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY python-executor.py .
 
-RUN pip install flask
+RUN pip install flask black
 
 EXPOSE 8082
 

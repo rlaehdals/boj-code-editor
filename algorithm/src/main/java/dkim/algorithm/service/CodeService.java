@@ -3,7 +3,9 @@ package dkim.algorithm.service;
 import dkim.algorithm.controller.request.FormatCode;
 import dkim.algorithm.controller.request.Language;
 import dkim.algorithm.controller.request.SubmissionCodes;
+import dkim.algorithm.controller.response.CodeFormattingResult;
 import dkim.algorithm.controller.response.CodeSubmissionResult;
+import dkim.algorithm.controller.response.FormattingCodeResponse;
 import dkim.algorithm.controller.response.SubmissionCodesResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -79,14 +81,14 @@ public class CodeService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<SubmissionCodes> requestEntity = new HttpEntity<>(submissionCodes, headers);
+        HttpEntity<FormatCode> requestEntity = new HttpEntity<>(formatCode, headers);
 
-        CodeSubmissionResult result = restTemplate.postForObject(url, requestEntity, CodeSubmissionResult.class);
+        CodeFormattingResult result = restTemplate.postForObject(url, requestEntity, CodeFormattingResult.class);
 
         if (result != null && (result.getStderr() == null || result.getStderr().isEmpty())) {
-            return new SubmissionCodesResponse(submissionCodes.getExpectedAnswer(), result.getStdout(), null);
+            return new FormattingCodeResponse(result.getCode(), "");
         } else {
-            return new SubmissionCodesResponse(null, null, result != null ? result.getStderr() : "Execution failed");
+            return new FormattingCodeResponse(null, result.getStderr());
         }
     }
 }

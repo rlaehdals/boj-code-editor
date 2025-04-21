@@ -25,6 +25,4 @@ public class CodeController {
         return Response.OK.getApiResponse(codeService.formatCode(formatCode));
     }
 
-    
-
 }

@@ -14,9 +14,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins(
                         "127.0.0.1:3000",
-                        "http://localhost:3000",
-                        "http://dkim-boj-code-edit.p-e.kr",
-                        "https://dkim-boj-code-edit.p-e.kr")
+                        "http://localhost:3000")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*");
     }

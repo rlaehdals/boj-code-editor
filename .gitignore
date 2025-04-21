@@ -53,12 +53,15 @@
 /algorithm-frontyarn-debug.log*
 /algorithm-frontyarn-error.log*
 
-
 /java-executor/**/.DS_Store
 /java-executor/target/
 
 /java-executor/dependency-reduced-pom.xml
 /java-executor/deploy.sh
+/java-executor/.idea
 
 /javascript-executor/node_modules/
 /javascript-executor/package-lock.json
+/javascript-executor/.idea
+
+/python-executor/.idea

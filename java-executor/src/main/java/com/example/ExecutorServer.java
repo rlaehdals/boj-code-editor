@@ -38,9 +38,7 @@ public class ExecutorServer {
 
             try {
                 String formattedCode = formatJavaCode(code);
-                JsonObject responseJson = new JsonObject();
-                responseJson.addProperty("formattedCode", formattedCode);
-                return responseJson.toString();
+                return formatJsonResponse(formattedCode);
             } catch (Exception e) {
                 return buildErrorResponse("Formatting Error: " + e.getMessage(), -1, "FORMATTING_ERROR");
             }
@@ -160,6 +158,15 @@ public class ExecutorServer {
         return obj.toString();
     }
 
+    private static String formatJsonResponse(String code) {
+        JsonObject obj = new JsonObject();
+        obj.addProperty("code", code);
+        obj.addProperty("stderr", "");
+        obj.addProperty("exitCode", "");
+        obj.addProperty("status", "");
+        return obj.toString();
+    }
+
     private static String buildErrorResponse(String message, int exitCode, String status) {
         return buildJsonResponse("", message, exitCode, status);
     }
@@ -174,5 +181,4 @@ public class ExecutorServer {
     private static String formatJavaCode(String inputCode) throws Exception {
         return new Formatter().formatSource(inputCode);
     }
-
 }

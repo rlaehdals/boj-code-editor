@@ -26,6 +26,14 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>9</source>
+                    <target>9</target>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <dependencies>
@@ -39,27 +47,25 @@
             <artifactId>gson</artifactId>
             <version>2.10.1</version>
         </dependency>
-        <!-- SLF4J API 추가 -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.32</version> <!-- SLF4J API의 최신 안정적인 버전 -->
+            <version>1.7.32</version>
         </dependency>
-        <!-- Logback 추가 -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.6</version> <!-- Logback의 최신 안정적인 버전 -->
+            <version>1.2.6</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
-            <version>1.2.6</version> <!-- Logback Core의 최신 안정적인 버전 -->
+            <version>1.2.6</version>
         </dependency>
         <dependency>
             <groupId>com.google.googlejavaformat</groupId>
             <artifactId>google-java-format</artifactId>
-            <version>1.15.0</version>
+            <version>1.18.1</version>
         </dependency>
     </dependencies>
 </project>

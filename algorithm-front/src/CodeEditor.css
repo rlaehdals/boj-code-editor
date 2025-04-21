@@ -22,49 +22,43 @@ body {
   margin-bottom: 0.5rem;
 }
 
-.code-input {
-  width: 100%;
-  min-height: 300px;
-  background: #1a1a1a;
-  border: 1px solid #333;
-  color: #f1f1f1;
-  font-family: monospace;
-  padding: 1rem;
-  border-radius: 8px;
-  resize: vertical;
-  box-sizing: border-box;
+.button-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  align-items: center;
 }
 
-.copy-btn,
-.modal-btn,
-.run-btn,
-.add-btn,
-.modal-actions button,
-.delete-btn {
-  margin-top: 1rem;
-  background: #272727;
+.btn {
+  background: #2d2d2d;
   color: #ffffff;
   border: 1px solid #444;
-  padding: 0.6rem 1rem;
   border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 14px;
   cursor: pointer;
+  height: 32px;
   transition: all 0.2s ease-in-out;
 }
 
-.copy-btn:hover,
-.modal-btn:hover,
-.run-btn:hover,
-.add-btn:hover,
-.modal-actions button:hover,
-.delete-btn:hover {
+.btn:hover {
   background: #3a3a3a;
   transform: scale(1.05);
 }
 
-.run-btn:disabled {
+.btn:disabled {
   background: #555;
   cursor: not-allowed;
   opacity: 0.6;
+}
+
+.btn-select {
+  display: flex;
+  align-items: center;
+}
+
+.ace_editor, .ace_content {
+  font-family: 'Fira Code', monospace !important;
 }
 
 .action-section {
@@ -84,6 +78,7 @@ body {
   padding: 1rem;
   border-radius: 8px;
   margin-bottom: 1rem;
+  white-space: pre-wrap;
 }
 
 .result-card.success {
@@ -105,9 +100,53 @@ body {
   margin-top: 0.5rem;
 }
 
-.error-message {
+.result-block {
+  margin-bottom: 0.75rem;
+}
+
+.result-label {
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+  color: #9acdff;
+}
+
+.result-content {
+  background: #101010;
+  padding: 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #333;
+  white-space: pre-wrap;
+}
+
+.error-text {
   color: #ff9800;
-  margin-top: 0.5rem;
+}
+
+.error-box {
+  background-color: #ff5252;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0 5px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .modal-overlay {
@@ -143,17 +182,8 @@ body {
   margin-bottom: 0.5rem;
 }
 
-.modal-testcase-row input {
-  flex: 1;
-  padding: 0.5rem;
-  border-radius: 6px;
-  border: 1px solid #444;
-  background: #1a1a1a;
-  color: #f0f0f0;
-}
-
 .modal-testcase-row textarea {
-  width: 100%;
+  flex: 1;
   padding: 0.6rem;
   border-radius: 6px;
   border: 1px solid #444;
@@ -161,7 +191,7 @@ body {
   color: #f0f0f0;
   resize: vertical;
   box-sizing: border-box;
-  white-space: pre-wrap; /* 줄 바꿈을 그대로 표시 */
+  white-space: pre-wrap;
 }
 
 .input-error {
@@ -175,47 +205,11 @@ body {
   margin-top: 1rem;
 }
 
-.input-error {
-  border: 1px solid red; /* 입력값이 없을 때 빨간 테두리 */
-}
-
-.error-message {
-  color: red;
-  margin-top: 1rem;
-}
-
-.modal-actions button:disabled {
-  background: #555;
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-.result-card {
-  white-space: pre-wrap; /* 줄 바꿈을 그대로 표시 */
-}
-
-.result-block {
-  margin-bottom: 0.75rem;
-}
-
-.result-label {
-  font-weight: bold;
-  margin-bottom: 0.25rem;
-  color: #9acdff;
-}
-
-.result-content {
-  background: #101010;
-  padding: 0.75rem;
-  border-radius: 6px;
-  border: 1px solid #333;
-  white-space: pre-wrap;
-}
-
-.error-text {
-  color: #ff9800;
-}
-
-.ace_editor, .ace_content {
-  font-family: 'Fira Code', monospace !important;
+.copy-btn,
+.modal-btn,
+.run-btn,
+.add-btn,
+.delete-btn,
+.modal-actions button {
+  composes: btn;
 }

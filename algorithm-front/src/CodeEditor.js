@@ -34,7 +34,13 @@ const CodeEditor = () => {
   const [testCases, setTestCases] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [resultsVisible, setResultsVisible] = useState(false);
+  const [formatError, setFormatError] = useState(null);
+  const [showError, setShowError] = useState(false);
   const editorRef = useRef(null);
+
+  useEffect(() => {
+    if (formatError) setShowError(true);
+  }, [formatError]);
 
   useEffect(() => {
     const editor = editorRef.current?.editor;
@@ -45,11 +51,8 @@ const CodeEditor = () => {
       bindKey: { win: 'Ctrl-X', mac: 'Cmd-X' },
       exec: (editor) => {
         const range = editor.getSelectionRange();
-        if (range.isEmpty()) {
-          editor.removeLines();
-        } else {
-          document.execCommand('cut');
-        }
+        if (range.isEmpty()) editor.removeLines();
+        else document.execCommand('cut');
       },
     });
   }, []);
@@ -58,39 +61,44 @@ const CodeEditor = () => {
     setCode(defaultCode[language]);
   }, [language]);
 
+  const extractCoreErrorMessage = (rawError) => {
+    if (!rawError) return 'Unknown Error';
+    if (language === 'python') {
+      const match = rawError.match(/Cannot parse:[^\n]*/);
+      return match ? match[0] : rawError.split('\n')[0];
+    }
+    return rawError;
+  };
+
   const formatCode = async () => {
+    setFormatError(null);
     if (language === 'javascript') {
       try {
         const formatted = await prettier.format(code, {
           parser: "babel",
           plugins: [parserBabel, estreePlugin],
         });
-
-        if (typeof formatted === 'string') {
-          setCode(formatted);
-        } else {
-          console.error('Invalid formatted code:', formatted);
-        }
+        if (typeof formatted === 'string') setCode(formatted);
+        else setFormatError('Formatting Error');
       } catch (error) {
-        console.error('JavaScript formatting error:', error);
+        setFormatError(`JavaScript 포맷팅 오류: ${error.message || 'Unknown Error'}`);
       }
     } else {
       try {
-        const res = await fetch(process.env.REACT_APP_API_URL || 'http://localhost:8080/code/format', {
+        const res = await fetch(process.env.REACT_APP_API_URL || 'http://localhost:8080/codes/format', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ code, language }),
+          body: JSON.stringify({ code, language: languageLabel[language] }),
         });
-
         const data = await res.json();
-
-        if (typeof data.formattedCode === 'string') {
-          setCode(data.formattedCode);
+        if (typeof data?.data?.formattedCode === 'string') {
+          setCode(data.data.formattedCode);
         } else {
-          console.error('Formatting failed:', data);
+          const rawError = data?.data?.errorMessage || data.message || data.stderr || JSON.stringify(data);
+          setFormatError(`Formatting Failed: ${extractCoreErrorMessage(rawError)}`);
         }
       } catch (error) {
-        console.error('Error fetching formatted code:', error);
+        setFormatError(`Formatting Failed: ${error.message || 'Unknown Error'}`);
       }
     }
   };
@@ -121,44 +129,42 @@ const CodeEditor = () => {
     const updated = testCases.map(tc => ({ ...tc, loading: true, result: null }));
     setTestCases(updated);
 
-    const results = await Promise.all(
-      updated.map(async (tc) => {
-        try {
-          const res = await fetch(process.env.REACT_APP_API_URL || 'http://localhost:8080/codes', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              code,
-              input: tc.input,
-              expectedAnswer: tc.output,
-              language: languageLabel[language],
-            }),
-          });
-          const data = await res.json();
-          return {
-            ...tc,
-            loading: false,
-            result: {
-              input: tc.input,
-              expected: data.data.expectedAnswer,
-              actual: data.data.realAnswer,
-              errorMessage: data.data.errorMessage,
-            },
-          };
-        } catch {
-          return {
-            ...tc,
-            loading: false,
-            result: {
-              input: tc.input,
-              expected: tc.output,
-              actual: null,
-              errorMessage: 'Network error',
-            },
-          };
-        }
-      })
-    );
+    const results = await Promise.all(updated.map(async (tc) => {
+      try {
+        const res = await fetch(process.env.REACT_APP_API_URL || 'http://localhost:8080/codes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            code,
+            input: tc.input,
+            expectedAnswer: tc.output,
+            language: languageLabel[language],
+          }),
+        });
+        const data = await res.json();
+        return {
+          ...tc,
+          loading: false,
+          result: {
+            input: tc.input,
+            expected: data.data.expectedAnswer,
+            actual: data.data.realAnswer,
+            errorMessage: data.data.errorMessage,
+          },
+        };
+      } catch {
+        return {
+          ...tc,
+          loading: false,
+          result: {
+            input: tc.input,
+            expected: tc.output,
+            actual: null,
+            errorMessage: 'Network error',
+          },
+        };
+      }
+    }));
 
     setTestCases(results);
   };
@@ -179,73 +185,30 @@ const CodeEditor = () => {
     <div className="code-editor-container">
       <div className="code-section">
         <h2>Code Input</h2>
-        <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', alignItems: 'center' }}>
-          <button
-            onClick={copyCode}
-            style={{
-              backgroundColor: '#2d2d2d',
-              color: '#fff',
-              border: '1px solid #444',
-              borderRadius: '6px',
-              padding: '6px 12px',
-              fontSize: '14px',
-              cursor: 'pointer',
-              height: '32px',
-            }}
-          >
-            📋 Copy Code
-          </button>
-          <button
-            onClick={formatCode}
-            style={{
-              backgroundColor: '#2d2d2d',
-              color: '#fff',
-              border: '1px solid #444',
-              borderRadius: '6px',
-              padding: '6px 12px',
-              fontSize: '14px',
-              cursor: 'pointer',
-              height: '32px',
-            }}
-          >
-            🔧 Format Code
-          </button>
-          <button
-            onClick={() => setAutocomplete((prev) => !prev)}
-            style={{
-              backgroundColor: '#2d2d2d',
-              color: '#fff',
-              border: '1px solid #444',
-              borderRadius: '6px',
-              padding: '6px 12px',
-              fontSize: '14px',
-              cursor: 'pointer',
-              height: '32px',
-            }}
-          >
+        <div className="button-row">
+          <button className="btn btn-copy" onClick={copyCode}>📋 Copy Code</button>
+          <button className="btn btn-format" onClick={formatCode}>🔧 Format Code</button>
+          <button className="btn btn-autocomplete" onClick={() => setAutocomplete(prev => !prev)}>
             ⚙️ Autocomplete {autocomplete ? 'Off' : 'On'}
           </button>
           <select
+            className="btn btn-select"
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
-            style={{
-              backgroundColor: '#2d2d2d',
-              color: '#fff',
-              border: '1px solid #444',
-              borderRadius: '6px',
-              padding: '6px 12px',
-              fontSize: '14px',
-              cursor: 'pointer',
-              height: '32px', // Match the button height
-              display: 'flex',
-              alignItems: 'center',
-            }}
           >
             <option value="java">Java</option>
             <option value="python">Python</option>
-            <option value="javascript">JavaScript</option> {/* Added JavaScript */}
+            <option value="javascript">JavaScript</option>
           </select>
         </div>
+
+        {showError && formatError && (
+          <div className="error-box">
+            <div><strong>Error:</strong> {formatError}</div>
+            <button className="close-btn" onClick={() => setShowError(false)}>✕</button>
+          </div>
+        )}
+
         <AceEditor
           mode={language}
           theme="monokai"
@@ -264,11 +227,6 @@ const CodeEditor = () => {
             enableSnippets: true,
             tabSize: 4,
             useWorker: false,
-          }}
-          style={{
-            backgroundColor: '#1a1a1a',
-            border: '1px solid #333',
-            borderRadius: '8px',
           }}
         />
       </div>

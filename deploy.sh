@@ -22,7 +22,7 @@ case $option in
         ;;
     3)
         echo "Building and starting Algorithm Front service..."
-        docker-compose up -d --build algorithm-front
+        docker-compose up -d --build front
         ;;
     4)
         echo "Building and starting Java Executor service..."
