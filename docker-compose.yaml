@@ -71,10 +71,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8083:8083"
-    env_file:
-      - ./javascript-executor/.env
-    environment:
-      - ALLOWED_ORIGIN=${ALLOWED_ORIGIN}
     read_only: true
     tmpfs:
       - /tmp

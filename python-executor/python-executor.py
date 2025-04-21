@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import subprocess
 import tempfile
 import os
@@ -7,6 +8,8 @@ import black
 import traceback
 
 app = Flask(__name__)
+allowed_origin = os.getenv('ALLOWED_ORIGIN', '*')
+CORS(app, resources={r"/*": {"origins": allowed_origin}})
 
 TIMEOUT_SECONDS = 10
 
