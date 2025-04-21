@@ -4,7 +4,7 @@
 
 While solving Baekjoon algorithms, I thought it would be helpful to have a web-based code editor. So, I created a code editor optimized for Baekjoon. This web-based editor supports Java, Python, and JavaScript.
 
-<img width="976" alt="Image" src="https://github.com/user-attachments/assets/b20f5023-3eb4-426a-91ef-c7ac8ba6c7c1" />
+<img width="967" alt="Image" src="https://github.com/user-attachments/assets/61ae597c-6197-41d2-8020-eec785e91a97" />
 
 ## Prerequisites
 
