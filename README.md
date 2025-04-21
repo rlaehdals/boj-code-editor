@@ -59,7 +59,6 @@ To expose the editor to the public, follow these steps:
 - **Frontend (`.env`)**
   ```env
   REACT_APP_API_URL=https://example.com
-  ALLOWED_ORIGIN=https://example.com
   ```
 
 ---
