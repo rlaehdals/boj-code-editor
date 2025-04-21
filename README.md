@@ -68,6 +68,7 @@ To expose the editor to the public, follow these steps:
 
 ```bash
 .
+├── algorithm              # Springboot-based web Server
 ├── algorithm-front        # React-based web editor (CodeEditor.js)
 ├── java-executor          # Java code executor server
 ├── python-executor        # Python code executor server
