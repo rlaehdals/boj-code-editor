@@ -1,30 +1,82 @@
-# Web Code Editor for Baekjoon Algorithm
+# 📘 Web Code Editor for Baekjoon Algorithm
 
-## Purpose
+A **web-based code editor** built to improve your experience solving problems on [Baekjoon Online Judge](https://www.acmicpc.net/).  
+Write, format, and test your Java, Python, or JavaScript code directly in the browser — fast, minimal, and beginner-friendly.
 
-While solving Baekjoon algorithms, I thought it would be helpful to have a web-based code editor. So, I created a code editor optimized for Baekjoon. This web-based editor supports Java, Python, and JavaScript.
+<img width="967" alt="Image" src="https://github.com/user-attachments/assets/61ae597c-6197-41d2-8020-eec785e91a97" />
 
-<img width="976" alt="Image" src="https://github.com/user-attachments/assets/b20f5023-3eb4-426a-91ef-c7ac8ba6c7c1" />
+---
 
-## Prerequisites
+## 🚀 Features
 
-- Docker Compose must be installed to run the project.
+- ✍️ Supports **Java**, **Python**, and **JavaScript**
+- 🧠 Toggle **autocomplete** with Ace Editor
+- 🧪 Create, edit, and remove **custom test cases**
+- ✅ Compare **expected vs. actual** output
+- 🎯 **Code formatting** using Prettier (for JS) or remote API
+- 📋 Copy code to clipboard with one click
 
-## How to Run
+---
 
-1. Clone the repository and navigate to the project root directory.
-2. You can deploy the application by running the `deploy.sh` script located at the root of the project.
-3. On the first launch, select option 1 and follow the prompts for further configuration.
-4. Once the application is running, access it by navigating to `http://localhost:3000` in your web browser.
+## 📦 Prerequisites
 
-## Customization
+- Docker & Docker Compose must be installed
 
-If you want to expose the editor externally, you can follow these steps:
+---
 
-1. **Domain Setup:** Obtain a domain and set up an NGINX reverse proxy.
-2. **URL Structure:** Both the frontend (`example.com`) and server should use the same domain.
-   - The executors should be accessible via a subdomain, such as `code.example.com`.
-3. **Configuration:** 
-   - In the server's `application.yaml`, set the `code.executor.url` value to point to your executor's URL (e.g., `https://code.example.com`).
-   - In the `algorithm-front`,`javascript-executor`, create a `.env` file and set the `REACT_APP_API_URL`, `ALLOWED_ORIGIN` variable to the domain where the frontend is hosted (e.g., `https://example.com`).
+## ⚙️ How to Run (Locally)
 
+```bash
+git clone https://github.com/rlaehdals/boj-code-editor.git
+cd boj-code-editor
+./deploy.sh
+```
+
+1. On the first launch, choose **Option 1** when prompted.
+2. Follow the on-screen instructions to complete the setup.
+3. Open your browser and go to [http://localhost:3000](http://localhost:3000)
+
+---
+
+## 🌐 Deploy with Custom Domain
+
+To expose the editor to the public, follow these steps:
+
+### 1. 🛠 Domain & NGINX Setup
+- Point your domain to a server with NGINX and configure a reverse proxy.
+
+### 2. 🏷 Recommended URL structure
+- Frontend: `https://example.com`
+- Executor server: `https://code.example.com`
+
+### 3. 🔧 Configuration
+- **Server (`application.yaml`)**
+  ```yaml
+  code:
+    executor:
+      url: https://code.example.com
+  ```
+- **Frontend (`.env`)**
+  ```env
+  REACT_APP_API_URL=https://example.com
+  ALLOWED_ORIGIN=https://example.com
+  ```
+
+---
+
+## 📁 Project Structure (Overview)
+
+```bash
+.
+├── algorithm-front        # React-based web editor (CodeEditor.js)
+├── java-executor          # Java code executor server
+├── python-executor        # Python code executor server
+├── javascript-executor    # JavaScript code executor server
+└── deploy.sh              # One-click deploy script
+```
+
+---
+
+## 📜 License
+
+This project is licensed under the MIT License.
