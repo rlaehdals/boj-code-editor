@@ -37,6 +37,8 @@ const CodeEditor = () => {
   const [formatError, setFormatError] = useState(null);
   const [showError, setShowError] = useState(false);
   const editorRef = useRef(null);
+  const [isFormatting, setIsFormatting] = useState(false);
+  const [isRunning, setIsRunning] = useState(false);
 
   useEffect(() => {
     if (formatError) setShowError(true);
@@ -72,6 +74,7 @@ const CodeEditor = () => {
 
   const formatCode = async () => {
     setFormatError(null);
+    setIsFormatting(true);
     if (language === 'javascript') {
       try {
         const formatted = await prettier.format(code, {
@@ -82,6 +85,8 @@ const CodeEditor = () => {
         else setFormatError('Formatting Error');
       } catch (error) {
         setFormatError(`JavaScript 포맷팅 오류: ${error.message || 'Unknown Error'}`);
+      } finally {
+        setIsFormatting(false);
       }
     } else {
       try {
@@ -99,6 +104,8 @@ const CodeEditor = () => {
         }
       } catch (error) {
         setFormatError(`Formatting Failed: ${error.message || 'Unknown Error'}`);
+      } finally{
+        setIsFormatting(false);
       }
     }
   };
@@ -126,6 +133,7 @@ const CodeEditor = () => {
     }
 
     setResultsVisible(true);
+    setIsRunning(true);
     const updated = testCases.map(tc => ({ ...tc, loading: true, result: null }));
     setTestCases(updated);
 
@@ -165,7 +173,7 @@ const CodeEditor = () => {
         };
       }
     }));
-
+    setIsRunning(false);
     setTestCases(results);
   };
 
@@ -186,10 +194,10 @@ const CodeEditor = () => {
       <div className="code-section">
         <h2>Code Input</h2>
         <div className="button-row">
-          <button className="btn btn-copy" onClick={copyCode}>📋 Copy Code</button>
-          <button className="btn btn-format" onClick={formatCode}>🔧 Format Code</button>
+          <button className="btn btn-copy" onClick={copyCode}>:clipboard: Copy Code</button>
+          <button className="btn btn-format" onClick={formatCode} disabled={isFormatting}>:wrench: Format Code</button>
           <button className="btn btn-autocomplete" onClick={() => setAutocomplete(prev => !prev)}>
-            ⚙️ Autocomplete {autocomplete ? 'Off' : 'On'}
+            :gear: Autocomplete {autocomplete ? 'Off' : 'On'}
           </button>
           <select
             className="btn btn-select"
@@ -233,7 +241,7 @@ const CodeEditor = () => {
 
       <div className="action-section">
         <button className="modal-btn" onClick={() => setShowModal(true)}>Test Case Settings</button>
-        <button className="run-btn" onClick={runCode} disabled={testCases.length === 0}>Run Code</button>
+        <button className="run-btn" onClick={runCode} disabled={testCases.length === 0 || isRunning}>Run Code</button>
       </div>
 
       {resultsVisible && testCases.some(tc => tc.result || tc.loading) && (
@@ -246,7 +254,7 @@ const CodeEditor = () => {
             return (
               <div key={i} className={`result-card ${status}`}>
                 {tc.loading ? (
-                  <div className="loading">⏳ Running...</div>
+                  <div className="loading">:hourglass_flowing_sand: Running...</div>
                 ) : (
                   <>
                     <ResultBlock label="Input" value={r.input} />
